@@ -1,0 +1,252 @@
+<!dooctype html>
+<meta charset=utf-8>
+<body id=b>
+<script>
+/*======================
+ IF THE MOON WAS 1PX...
+========================
+
+Golfed by xem & the Codegolf team, inspired by goo.gl/84Rajo
+
+This demo shows the main bodies of the Solar system (the Sun, 13 planets, 21 moons and 161 minor satellites),
+in a very long HTML page (~6,250,000px!) and with a very high precision, in just 1kb of JS.
+The Moon (which diameter is ~3474km) is drawn as 1px and all the rest is drawn to scale.
+
+The following data is used for the main bodies:
+The distances represent the semi-major axis of the body's orbit.
+The sizes in px are rounded to the higher integer, and floored at 2px (because rounded 1x1px divs look too small)
+1 UA (Astronomical Unit) equals ~149,600,000km, or 43062px.
+
++-------------+-------------+----------------+----------------+----------+----------+-------+-------+------------+-------+
+| Body / belt | Distance to | Distance to    | Distance to    | Diameter | Diameter | Color | Moons | minor      | Rings |
+|             | Sun (in UA) | last body (UA) | last body (px) | (in km)  | (in px)  | (hex) |       | satellites |       |
++=============+=============+================+================+==========+==========+=======+=======+============+=======+
+| Sun         | 0           | 0              | 0              | 1391400  | 401      | #fb4  | 0     | 0          | no    |
+| Mercury     | 0.38709893  | 0.3870         | 16665          | 4879     | 2        | #fa0  | 0     | 0          | no    |
+| Venus       | 0.723332    | 0.3362         | 14477          | 12104    | 4        | #aab  | 0     | 0          | no    |
+| Earth       | 1.000001018 | 0.2767         | 11915          | 12742    | 4        | #05d  | 1     | 0          | no    |
+| Mars        | 1.523679    | 0.5237         | 22552          | 6779     | 2        | #d84  | 2     | 0          | no    |
++-------------+-------------+----------------+----------------+----------+----------+-------+-------+------------+-------+
+| Asteroid b. | 1.7         | 0.1763         | 7592           |
++-------------+-------------+----------------+----------------+----------+----------+-------+-------+------------+-------+
+| Ceres       | 2.7675      | 1.0675         | 45968          | 946      | 2        | #fff  | 0     | 0          | no    |
+| Jupiter     | 5.45492     | 2.6874         | 1157245        | 139822   | 41       | #c84  | 4     | 63         | yes   |
+| Saturn      | 9.554909    | 4.0999         | 176550         | 116464   | 34       | #ec7  | 7     | 55         | yes   |
+| Uranus      | 19.2184     | 9.6635         | 416130         | 50724    | 15       | #cee  | 5     | 22         | yes   |
+| Neptune     | 30.110387   | 10.892         | 469031         | 49244    | 15       | #46f  | 1     | 13         | yes   |
++-------------+-------------+----------------+----------------+----------+----------+-------+-------+------------+-------+
+| Kuiper belt | 35          | 4.8896         | 210556         |
++-------------+-------------+----------------+----------------+----------+----------+-------+-------+------------+-------+
+| Pluto       | 39.48       | 4.48           | 192917         |          | 2        | #db8  | 1     | 4          | no    |
+| Haumea      | 43.218      | 3.738          | 160966         | 1240     | 2        | #fff  | 0     | 2          | no    |
+| Makemake    | 45.715      | 2.497          | 107526         | 1430     | 2        | #fff  | 0     | 1          | no    |
+| Eris        | 97.651      | 51.936         | 2236468        | 2326     | 2        | #fff  | 0     | 1          | no    |
++-------------+-------------+----------------+----------------+----------+----------+-------+-------+------------+-------+
+| Oort cloud  | 20000       | 19902.349      | too far        |
++-------------+-------------+----------------+----------------+
+
+The following data is used for the moons (the satellites big enough to have a round shape
+(plus Mars' moons Phobos and Deimos which are not round but still well known)
+All the moons are about the same size as the Moon or smaller so they're just drawn as 1px, and in white.
+
++---------+-----------+----------------+---------------------------+---------+
+| Planet  | Satellite | Distance from  | Distance from last planet | Distane |
+| name    | name      | planet (in km) | or satellite ( in km)     | (in px) |
++=========+===========+================+===========================+=========+
+| Earth   | The Moon  | 384399         | 384399                    | 111     |
++---------+-----------+----------------+---------------------------+---------+
+| Mars    | Phobos    | 9380           | 9380                      | 3       |
+|         | Deimos    | 23460          | 14080                     | 4       |
++---------+-----------+----------------+---------------------------+---------+
+| Jupiter | Io        | 421800         | 421800                    | 121     |
+|         | Europa    | 671100         | 249300                    | 72      |
+|         | Ganymede  | 1070400        | 399300                    | 115     |
+|         | Callisto  | 1882700        | 812300                    | 234     |
++---------+-----------+----------------+---------------------------+---------+
+| Saturn  | Mimas     | 185540         | 185540                    | 53      |
+|         | Enceladus | 238040         | 52500                     | 15      |
+|         | Tethys    | 294670         | 56630                     | 16      |
+|         | Dione     | 377420         | 82750                     | 24      |
+|         | Rhea      | 527070         | 149650                    | 43      |
+|         | Titan     | 1221870        | 694800                    | 200     |
+|         | Iapetus   | 3560840        | 2338970                   | 673     |
++---------+-----------+----------------+---------------------------+---------+
+| Uranus  | Miranda   | 129900         | 129900                    | 37      |
+|         | Ariel     | 190900         | 61000                     | 18      |
+|         | Umbriel   | 266000         | 75100                     | 22      |
+|         | Titania   | 436300         | 170300                    | 49      |
+|         | Oberon    | 583500         | 147200                    | 42      |
++---------+-----------+----------------+---------------------------+---------+
+| Neptune | Triton    | 354800         | 354800                    | 102     |
++---------+-----------+----------------+---------------------------+---------+
+| Pluto   | Charon    | 19591          | 19591                     | 6       |
++---------+-----------+----------------+---------------------------+---------+
+*/
+
+// First, create a container called "t", to set the font size, family and color for all the page.
+// Inside, add a legend container called "c" in fixed position.
+// <x> tags don't exist but they work like <span>'s, just shorter.
+// All the style attributes start with "color:#fff;" for RegPack optimization (the more string repetitions the better).
+// Inline styles contain tricks like "font:14px'arial'" or "padding:50vh+0+0" to avoid spaces and omit attribute quotes.
+// The Unicode ellipsis "…" takes 3 bytes in UTF-8, like "..." in ASCII.
+b.innerHTML += `<x style=color:#fff;font:14px'arial' id=t>
+  <x style=color:#fff;position:fixed id=c>
+    <h3>If the Moon was 1px…`;
+
+// The bodies array is called "n", the body counter "i".
+// The page's background is set to black with the old attribute "b.bgColor=0", and this 0 is also used to split n.
+// The trailing "0" generates an extra dummy planet, just to add an extra margin and avoid sticking to the bottom of the page.
+for(i in n = `Sun0Mercury0Venus0Earth0Mars0Asteroid belt0Ceres0Jupiter0Saturn0Uranus0Neptune0Kuiper belt0Pluto0Haumea0Makemake0Eris0Oort cloud0`.split(b.bgColor=0))
+{
+  // For each element of n:
+  // Add an anchor link and a body symbol (if any) to the legend.
+  // For bodies without symbol, the code fallbacks to "[undefined]" which makes an empty string.
+  // For the Asteroid belt and Kuiper belt, the symbol is just a space.
+  // Anchor links actually need the inline style "color:#fff" to avoid being blue (by default) or purple (when visited).
+  c.innerHTML +=
+  `<p>
+    <a style=color:#fff href=#${
+
+      // Anchor name (same as body's name)
+      n[i]
+
+    }>${
+
+      // Body's name
+      n[i]
+
+    }</a> `
+
+  // Body symbol
+  + [`☉☿♀♁♂ ⚳♃♄♅♆ ♇`[i]];
+
+  // Add a planet container.
+  // The <center> tags center the content horizontally.
+  // A padding-top of 50vh centers the planet vertically when its anchor is clicked.
+  // The belts are just hidden (drawn in black)
+  t.innerHTML +=
+  `<center style=color:#fff;margin:${
+
+    // The distance from the last planet is divided by 1000, rounded, stored in this array, and used as a margin-top:
+    [,17,15,12,23,8,46,1157,177,416,469,211,192,161,108,2236][i] * 999
+  }px+0+0;padding:50vh+0+0 id=${
+
+    // Planet id (its name)
+    n[i]
+
+  }>
+    <h3>${
+
+      // Planet name
+      n[i]
+
+    }
+      <p style=color:#fff;background:#${
+
+        // Planets colors are read from this string, 3 chars at the time.
+        // Belts are colored in black (#000) to be invisible.
+        `fb4fa0aab05dd84000fffc84ec7cee46f000db8fffffffff`.substr(i * 3, 3)
+      };border-radius:50%;width:${
+
+        // Planets width & height are read from this array. Planets without size and belts fallback to 2px.
+        [400,,4,4,,,,41,34,15,15][i] || 2
+
+      }px;height:${
+
+        // Height
+        [400,,4,4,,,,41,34,15,15][i] || 2
+
+      }px>
+        ${
+
+          // For jupiter, Saturn, Uranus and Neptune, the rings are symbolized with a slightly rotated <hr> element.
+          // here, "i % 11 > 6" is equivalent to "(i > 6 && i < 11)". 
+          i % 11 > 6
+          ? `<hr style=color:#fff;margin:${
+
+              // The <hr> has a negative margin equal to the radius of the planet to appear at its center.
+              -[14,10,0,0][i-7] - 24
+
+            }px;width:${
+            
+              // Rings width is twice the width of the planet
+              2 * [400,,4,4,,,,41,34,15,15][i] || 2
+
+            }px;transform:rotate(9deg>`
+
+          // No need to close the parens after "(9deg"
+
+          // Add an arrow after Oort cloud to show that it's very far away.
+          : i==16
+          ? `↓`
+
+          // Nothing for the other planets
+          : ``
+
+        }`;
+
+  // Add the moons
+  // "s" represents the main moons of a given body, "a" represents the current moon, and "s[a]" its offset.
+  // s[a] is equal to the offset from last planet or moon...
+  // more or less whatever extra offset is needed to cancel all the margins and line-heights, and place the dot at the right place.
+  for(a in s = 
+  [
+    ,,,
+    {Moon: 100},
+    {Phobos: -18, Deimos: -5},
+    ,,
+    {Io: 170, Europa: 56, Ganymede: 97, Callisto: 217},
+    {Mimas: 94, Enceladus: -3,Tethys: 0, Dione: 7,Rhea: 25, Titan: 183, Iapetus: 654},
+    {Miranda: 58, Ariel: 2, Umbriel: 5, Titania: 32, Oberon: 25},
+    {Triton: 122},
+    ,
+    {Charon: -20}
+  ][i])
+  {
+
+    // The moon is represented by a white braille character "·", followed by a non-breaking space (\xa0) and the moon's name.
+    // The width is set to 5px to keep the pixel centered. (the name overflows on the right)
+    t.innerHTML +=
+    `<center>
+      <p style=color:#fff;margin:${
+
+        // Moon offset
+        s[a]
+
+      }px+0+0;width:5px>`
+
+    // Moon pixel & NBSP
+    +`·\xa0`
+
+    // Moon name
+    + a;
+
+  }
+
+  // Add minor satellites below the main moons, with a pseudorandom offset.
+  // (Unfortunately, they are too numerous to be named and drawn at precise positions)
+  for(a = [63,55,22,13,,4,2,1,1][i-7]; a--;){
+    t.innerHTML +=
+    `<center>
+      <p style=color:#fff;margin:${
+
+        // Pseudorandom offset 
+        a * i % 50
+
+      }px>`
+
+    // white pixel (just an ASCII dot)
+    +`.`;
+  }
+}
+
+/*
+Conclusion:
+This demo generates about 15kb of HTML code!
+After hand minification it's 1416 bytes long,
+And after RegPack (excluding the var names "b" and "$", and with the ratios "2,1,0"), the demo fits in 1022 bytes.
+<3 is added at the end, because it's made with love.
+Cheers!
+*/
+
+</script>
