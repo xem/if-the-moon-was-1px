@@ -1,0 +1,171 @@
+<!dooctype html>
+<meta charset=utf-8>
+<body id=b>
+<script>
+// ========================
+//  IF THE MOON WAS 1PX...
+// ========================
+
+// Freely inspired by http://joshworth.com/dev/pixelspace/pixelspace_solarsystem.html
+
+// The following demo displays the main bodies of the Solar system
+// (the Sun, 13 planets and dwarf planets, 21 moons and 161 minor satellites)
+// in a long HTML page (~ 5,300,000 px long!).
+// The Moon (which diameter is about 3474 km) is drawn as 1px and all the rest is drawn to scale.
+// Note: 1 UA (Astronomical Unit) is about 149,600,000km, or 43062px.
+
+// The following data is used for the main bodies:
+// The value used for the distances are the semi-major axis of the body's orbit.
+// The diameters in px are rounded to the higher integer)
+
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | Body     | Distance from   | from last body  | (in px) | Diameter | (in px) | Color | Main       | Other      | Rings |
+// |          | the Sun (in UA) | (in UA)         |         | (in km)  |         | (hex) | satellites | satellites |       |
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | Sun      | 0               | 0               | 0       | 1391400  | 401     | #fb4  | 0          | 0          | no    |
+// | Mercury  | 0.38709893      | 0.3870          | 16665   | 4879     | 2       | #fa0  | 0          | 0          | no    |
+// | Venus    | 0.723332        | 0.3362          | 14477   | 12104    | 4       | #aab  | 0          | 0          | no    |
+// | Earth    | 1.000001018     | 0.2767          | 11915   | 12742    | 4       | #05d  | 1          | 0          | no    |
+// | Mars     | 1.523679        | 1.5237          | 65614   | 6779     | 2       | #d84  | 2          | 0          | no    |
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | (Asteroid belt)                                                                                                       |
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | Ceres    | 2.7675          | 1.2438          | 53561   | 946      | 1       | #fff  | 0          | 0          | no    |
+// | Jupiter  | 5.45492         | 2.6874          | 1157245 | 139822   | 41      | #c84  | 4          | 63         | yes   |
+// | Saturn   | 9.554909        | 4.0999          | 176550  | 116464   | 34      | #ec7  | 7          | 55         | yes   |
+// | Uranus   | 19.2184         | 9.6635          | 416130  | 50724    | 15      | #cee  | 5          | 22         | yes   |
+// | Neptune  | 30.110387       | 10.892          | 469031  | 49244    | 15      | #46f  | 1          | 13         | yes   |
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | (Kuiper belt)                                                                                                         |
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | Pluto    | 39.48           | 9.3696          | 403474  | 2374     | 1       | #db8  | 1          | 4          | no    |
+// | Haumea   | 43.218          | 3.738           | 160966  | 1240     | 1       | #fff  | 0          | 2          | no    |
+// | Makemake | 45.715          | 2.497           | 107526  | 1430     | 1       | #fff  | 0          | 1          | no    |
+// | Eris     | 97.651          | 51.936          | 2236468 | 2326     | 1       | #fff  | 0          | 1          | no    |
+// +----------+-----------------+-----------------+---------+----------+---------+-------+------------+------------+-------+
+// | (Oort cloud)                                                                                                          |
+// +-----------------------------------------------------------------------------------------------------------------------+
+
+// This is the data used for the main satellites - the ones big enough to have a round shape
+// (Except Mars' moons Phobos and Deimos which are not round but still famous)
+// All the moons are about the same size as the Moon or smaller so they're just drawn as 1px too.
+
+// +---------+-----------+----------------+---------------------+---------+
+// | Planet  | Satellite | Distance from  | from last satellite | (in px) |
+// |         |           | planet (in km) | or planet (in km)   |         |
+// +---------+-----------+----------------+---------------------+---------+
+// | Earth   | Moon      | 384399         | 384399              | 111     |
+// +---------+-----------+----------------+---------------------+---------+
+// | Mars    | Phobos    | 9380           | 9380                | 3       |
+// |         | Deimos    | 23460          | 14080               | 4       |
+// +---------+-----------+----------------+---------------------+---------+
+// | Jupiter | Io        | 421800         | 421800              | 121+20  |
+// |         | Europa    | 671100         | 249300              | 72      |
+// |         | Ganymede  | 1070400        | 399300              | 115     |
+// |         | Callisto  | 1882700        | 812300              | 234     |
+// +---------+-----------+----------------+---------------------+---------+
+// | Saturn  | Mimas     | 185540         | 185540              | 53+17   |
+// |         | Enceladus | 238040         | 52500               | 15      |
+// |         | Tethys    | 294670         | 56630               | 16      |
+// |         | Dione     | 377420         | 82750               | 24      |
+// |         | Rhea      | 527070         | 149650              | 43      |
+// |         | Titan     | 1221870        | 694800              | 200     |
+// |         | Iapetus   | 3560840        | 2338970             | 673     |
+// +---------+-----------+----------------+---------------------+---------+
+// | Uranus  | Miranda   | 129900         | 129900              | 37+8    |
+// |         | Ariel     | 190900         | 61000               | 18      |
+// |         | Umbriel   | 266000         | 75100               | 22      |
+// |         | Titania   | 436300         | 170300              | 49      |
+// |         | Oberon    | 583500         | 147200              | 42      |
+// +---------+-----------+----------------+---------------------+---------+
+// | Neptune | Triton    | 354800         | 354800              | 102+8   |
+// +---------+-----------+----------------+---------------------+---------+
+// | Pluto   | Charon    | 19591          | 19591               | 6       |
+// +---------+-----------+----------------+---------------------+---------+
+
+// The page contains a legend (the demo's title, anchor links for each planet and anotations),
+// Then all the bodies (planets and satellites) in the form of round, colored divs separated by margin-tops, plus their names.
+// Unfortunately, all the "other satellites" of each planet are too numerous to be named and drawn at precise positions,
+// So they're just drawn with a random offset between 0 and 66, and no name.
+// Four planets have rings. They're drawn with a negative offset (to appear at the middle of the planet),
+// That's why the first satellite of these planets contains an extra offset (the planet's radius in px).
+
+// Main satellites (name / distance in px)
+s=[
+  ,
+  ,
+  ,
+  {Moon:111}, // Earth
+  {Phobos:3,"<p>Deimos":4}, // Mars
+  ,
+  {Io:141,Europa:72,Ganymede:115,Callisto:234}, // Jupiter
+  {Mimas:70,Enceladus:15,Tethys:16,Dione:24,Rhea:43,Titan:200,Iapetus:673}, // Saturn
+  {Miranda:45,Ariel:18,Umbriel:22,Titania:49,Oberon:42}, //Uranus
+  {Triton:110}, // Neptune
+  {Charon:6} // Pluto
+];
+
+// Other satellites (number)
+o=[,,,,,,63,55,22,13,4,2,1,1];
+
+// Body names
+n="Sun0Mercury0Venus0Earth0Mars0Ceres0Jupiter0Saturn0Uranus0Neptune0Pluto0Haumea0Makemake0Eris".split(0);
+
+// Diameter of each body in px
+d=[401,2,4,4,2,1,41,34,15,15];
+
+// Distance of each body divided by 1000 and rounded
+D=[0,17,15,12,66,54,1157,177,416,469,403,161,108,2236];
+
+// Legend annotations
+l="0000(Asteroid belt)00000(Kuiper belt)0000(Oort cloud)".split(0);
+
+// Bodies colors
+c="fb4fa0aab05dd84fffc84ec7cee46fdb8fffffffff";
+
+// Black background on body
+b.bgColor=0;
+
+// Page container (t), legend container (B) and title
+b.innerHTML=
+`<div style='color:#fff;font:12px arial;margin:0 0 50vh'id=t>
+  <div style=position:fixed id=B>
+    <h3>If the Moon was 1px…`;
+
+// For each body
+for(i in n){
+  
+  // Add the name in an anchor link in the legend, plus an annotation if available
+  B.innerHTML+=`<a style=color:#fff href=#${n[i]}>${n[i]}</a><p>`+l[i]`;
+
+  // Draw the planet container, the planet's name and the planet
+  t.innerHTML+=
+  <center>
+    <h3 style=margin-top:${d[i]*999}px;padding-top:50vh id=${n[i]}>
+      ${n[i]}
+    </h3>
+    <div style=background:#${c.substr(i*3,3)};border-radius:50%;width:${d[i]|2}px;height:${d[i]|2}px>`;
+  
+  // Draw the planet's rings for Jupiter, Saturn, Uranus, Neptune
+  if(i>5&&i<10)t.innerHTML+=
+  `<center>
+    <div style=margin-top:${-d[i]/2}px;width:${d[i]+20}px;height:2px;background:#fff>`;
+  
+  // Draw the most important natural satellites and their name
+  for(j in s[i])t.innerHTML+=
+  `<center>
+    <div style=margin-top:${s[j]}px;line-height:0;background:#fff;width:1px;height:1px>
+      <b style=color:#fff;margin-left:9px>`+j;
+  
+  // Draw the other satellites separated by a random offset
+  if(o[i])for(j=o[i];j--;)t.innerHTML+=
+  `<center>
+    <div style=margin:${Math.random()*66}px;background:#fff;width:1px;height:1px>`;
+}
+
+// Note: this demo generates about 23kb of HTML!
+// After hand minification and RegPack (excluding the var names "b" and "$"), it takes 1021b, and the last 3 bytes are used for a heart in ASCII. <3
+
+// Cheers,
+// The Codegolf team
+</script>

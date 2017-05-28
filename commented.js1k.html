@@ -6,12 +6,6 @@
  IF THE MOON WAS 1PX...
 ========================
 
-Golfed by xem & the Codegolf team, inspired by goo.gl/84Rajo
-
-This demo shows the main bodies of the Solar system (the Sun, 13 planets, 21 moons and 161 minor satellites),
-in a very long HTML page (~6,250,000px!) and with a very high precision, in just 1kb of JS.
-The Moon (which diameter is ~3474km) is drawn as 1px and all the rest is drawn to scale.
-
 The following data is used for the main bodies:
 The distances represent the semi-major axis of the body's orbit.
 The sizes in px are rounded to the higher integer, and floored at 2px (because rounded 1x1px divs look too small)
@@ -239,14 +233,5 @@ for(i in n = `Sun0Mercury0Venus0Earth0Mars0Asteroid belt0Ceres0Jupiter0Saturn0Ur
     +`.`;
   }
 }
-
-/*
-Conclusion:
-This demo generates about 15kb of HTML code.
-After hand minification it's 1416 bytes long,
-And after RegPack (excluding the var names "b" and "$", and with the ratios "2,1,0"), the demo fits in 1022 bytes.
-<3 is added at the end, because it's made with love.
-Cheers!
-*/
 
 </script>

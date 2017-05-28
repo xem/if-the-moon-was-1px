@@ -1,0 +1,41 @@
+v1:
+
+// Sun & planets:
+// - Name
+// - equatorial diameter (size vs Earth's = 2*6378.1 km)
+// - semi-major axis (orbit radius in AU),
+// - color
+// - satellites
+
+// Satellites:
+// Data from https://en.wikipedia.org/wiki/List_of_natural_satellites
+// - Name
+// - mean radius (km)
+// - semi-major axis (km)
+
+
+// All lengths are in px:
+// Moon = 1737km = 1px
+// Any length in km => x / 1737 px
+// 1 UA = 149600000 km = 86125 px
+// Any length in AU => x * 86125 px
+// Earth diameter = 12756km = 7.344 px
+// Any length compared to Earth's => x * 7.344 px
+
+
+// V2:
+
+// Sort the moons by distance:
+
+for(i in d) if(d[i][5]) d[i][5] = d[i][5].sort(function(a,b){ return a[1]>b[1] })
+
+// Delta encode planets distances
+
+a=0; for(i in d) { d[i][2] = d[i][2] - a; a+= d[i][2] }
+
+// Delta encode moons distances
+
+a=0; for(i in d) for(j in d[i][5]) { d[i][5][j][1] = d[i][5][j][1] - a; a+= d[i][5][j][1] }
+
+// Let the distance of each planet be a margin-top from the last satellite of the previous planet
+// Also, substract the height of the previous planet and its name from each planet

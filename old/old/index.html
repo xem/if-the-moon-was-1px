@@ -1,0 +1,25 @@
+﻿<body id=b><script>
+d=["Sun0Mercury0Venus0Earth0Mars0Ceres0Jupiter0Saturn0Uranus0Neptune0Pluto0Haumea0Makemake".split(0), // Names
+"̠RF", // Sizes
+"\0!,kÑť̳󠾠̕ŇŇݮᦗ", // Distances / 1000
+"fb4fa0aab05dd84fffc84ec7cee46fdb8ffffff", // Colors
+// Named moons
+[,,,
+[[279,"Moon"]],,,
+[[116,"Io"],[143,"Europa"],[230,"Ganymede"],[468,"Callisto"]],
+[[11,"Mimas"],[15,"Enceladus"],[1,"Tethys"],[47,"Dione"],[86,"Rhea"],[400,"Titan"],[1185,"Iapetus"]],
+[[18,"Miranda"],[35,"Ariel"],[44,"Umbriel"],[98,"Titania"],[84,"Oberon"]],
+[[137,"Triton"]],
+[[11,"Charon"]]]
+// Unnamed moons
+[,,,,"\n",,"Iథࢺ«ǝਘƾ͏Ǫ(/E©,$\n-$@̌D  	.jH&!ý࣌","C	\0		 \0\0\0¡჻КԐÄŲĸã¹·nrn]_½@ßµF%×ɳÎÌ0҂","\0ࡎڥƽĠࡄӟьʝߕ","சᛸ༎ʕ㐁ώ","\r","","Ù"];
+
+b.bgColor=0;
+b.innerHTML="<div style='color:#fff;font:12px arial'id=B><div style='color:#fff;position:fixed'id=t>";
+for(i of d){
+t.innerHTML+=[i[6]]+`<p><a style='color:#fff'href=#${i[0]}>`+i[0];
+B.innerHTML+=`<center><h3 style='color:#fff;margin-top:${i[2]}px;padding-top:1%'id=${i[0]}>${i[0]}</h3><div style='color:#fff;background:#${i[3]};border-radius:50%;width:${i[1]}px;height:${i[1]}px'>`;
+i[4]&&(B.innerHTML+=`<center><div style='color:#fff;margin-top:${-i[1]/2}px;width:${i[1]+20}px;border:2px solid #fff'>`);
+for(j of i[5])B.innerHTML+=`<center><div style='color:#fff;margin-top:${j[1]}px;line-height:0;background:#fff;border-radius:50%;width:${j[0]?2:1}px;height:${j[0]?2:1}px'><b style='color:#fff;margin-left:9px'>${j[0]}`
+}
+</script>
